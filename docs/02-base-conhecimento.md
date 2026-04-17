@@ -1,15 +1,7 @@
 # Base de Conhecimento
-
-> [!TIP]
-> **Prompt usado para esta etapa:**
-> 
-> Organize a base de conhecimento do agente "Edu" usando os 4 arquivos da pasta `data/` (em anexo). Explique pra que serve cada arquivo e monte um exemplo de contexto formatado que será enviado pro LLM. Preencha o template abaixo.
->
-> [cole ou anexe o template `02-base-conhecimento.md` pra contexto]
-
 ## Dados Utilizados
 
-| Arquivo | Formato | Para que serve no Edu? |
+| Arquivo | Formato | Para que serve na Savi? |
 |---------|---------|---------------------|
 | `historico_atendimento.csv` | CSV | Contextualizar interações anteriores, ou seja, dar continuidade ao atendimento de forma mais eficiente. |
 | `perfil_investidor.json` | JSON | Personalizar as explicações sobre as dúvidas e necessidades de aprendizado do cliente. |
@@ -22,7 +14,7 @@
 
 > Você modificou ou expandiu os dados mockados? Descreva aqui.
 
-O produto Fundo Imobiliário (FII) substituiu o Fundo Multimercado, pois pessoalmente me sinto mais confiante em usar apenas produtos financeiros que eu conheço. Assim, poderei validar as respostas do Edu de forma mais assertiva.
+Utilizei a base dos dados mocados, porém alterei os dados pessoais do usuario e as transações para melhorar as respostas e tornar o agente mais assertivo.
 
 ---
 
@@ -46,30 +38,35 @@ produtos = json.load(open('./data/produtos_financeiros.json'))
 ### Como os dados são usados no prompt?
 > Os dados vão no system prompt? São consultados dinamicamente?
 
-Para simplificar, podemos simplesmente "injetar" os dados em nosso prompt, agarntindo que o Agente tenha o melhor contexto possível. Lembrando que, em soluções mais robustas, o ideal é que essas informaçoes sejam carregadas dinamicamente para que possamos ganhar flexibilidade.
+Para simplificar, podemos simplesmente "injetar" os dados em nosso prompt, agarantindo que o Agente tenha o melhor contexto possível. Lembrando que, em soluções mais robustas, o ideal é que essas informaçoes sejam carregadas dinamicamente para que possamos ganhar flexibilidade.
 
 ```text
 DADOS DO CLIENTE E PERFIL (data/perfil_investidor.json):
 {
-  "nome": "João Silva",
-  "idade": 32,
-  "profissao": "Analista de Sistemas",
-  "renda_mensal": 5000.00,
-  "perfil_investidor": "moderado",
+  "nome": "Maria Eduarda",
+  "idade": 22,
+  "profissao": "Atendente de lanchonete",
+  "renda_mensal": 1500.00,
+  "perfil_investidor": "baixo",
   "objetivo_principal": "Construir reserva de emergência",
-  "patrimonio_total": 15000.00,
-  "reserva_emergencia_atual": 10000.00,
+  "patrimonio_total": 5000.00,
+  "reserva_emergencia_atual": 100.00,
   "aceita_risco": false,
   "metas": [
     {
       "meta": "Completar reserva de emergência",
       "valor_necessario": 15000.00,
-      "prazo": "2026-06"
+      "prazo": "2027-06"
     },
     {
-      "meta": "Entrada do apartamento",
-      "valor_necessario": 50000.00,
+      "meta": "Entrada do apartamento novo",
+      "valor_necessario": 5000.00,
       "prazo": "2027-12"
+    },
+    {
+      "meta": "Comprar um carro",
+      "valor_necessario": 52000.00,
+      "prazo": "2029-10"
     }
   ]
 }
@@ -86,6 +83,8 @@ data,descricao,categoria,valor,tipo
 2025-10-15,Conta de Luz,moradia,180.00,saida
 2025-10-20,Academia,saude,99.00,saida
 2025-10-25,Combustível,transporte,250.00,saida
+2025-10-26,bis,lazer,5.00,saida
+2025-11-29,coca-cola 2l,lazer,25.00,saida
 
 HISTORICO DE ATENDIMENTO DO CLIENTE (data/historico_atendimento.csv):
 data,canal,tema,resumo,resolvido
@@ -150,18 +149,40 @@ O exemplo de contexto montado abaixo, se baiseia nos dados originais da base de 
 
 ```
 DADOS DO CLIENTE:
-- Nome: João Silva
-- Perfil: Moderado
+- Nome: Maria Eduarda
+- Idade: 22 anos
+- Profissão: Atendente de lanchonete
+- Renda Mensal: R$ 1.500,00
+- Perfil: Conservador (baixo risco)
 - Objetivo: Construir reserva de emergência
-- Reserva atual: R$ 10.000 (meta: R$ 15.000)
-
+- Reserva atual: R$ 100,00 (meta: R$ 15.000,00)
+- Patrimônio total: R$ 5.000,00
+- Aceita risco: Não
+ 
+METAS FINANCEIRAS:
+- Completar reserva de emergência: R$ 15.000,00 (prazo: junho/2027)
+- Entrada do apartamento novo: R$ 5.000,00 (prazo: dezembro/2027)
+- Comprar um carro: R$ 52.000,00 (prazo: outubro/2029)
+ 
 RESUMO DE GASTOS:
-- Moradia: R$ 1.380
-- Alimentação: R$ 570
-- Transporte: R$ 295
-- Saúde: R$ 188
-- Lazer: R$ 55,90
-- Total de saídas: R$ 2.488,90
+- Moradia: R$ 1.380,00
+  * Aluguel: R$ 1.200,00
+  * Conta de Luz: R$ 180,00
+- Alimentação: R$ 570,00
+  * Supermercado: R$ 450,00
+  * Restaurante: R$ 120,00
+- Transporte: R$ 295,00
+  * Combustível: R$ 250,00
+  * Uber: R$ 45,00
+- Saúde: R$ 188,00
+  * Academia: R$ 99,00
+  * Farmácia: R$ 89,00
+- Lazer: R$ 85,90
+  * Netflix: R$ 55,90
+  * Coca-Cola 2L: R$ 25,00
+  * Bis: R$ 5,00
+- Total de saídas: R$ 2.518,90
+- Saldo disponível: R$ 2.481,10
 
 PRODUTOS DISPONÍVEIS PARA EXPLICAR:
 - Tesouro Selic (risco baixo)
