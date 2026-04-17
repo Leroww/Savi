@@ -9,3 +9,5 @@ data,descricao,categoria,valor,tipo
 2025-10-15,Conta de Luz,moradia,180.00,saida
 2025-10-20,Academia,saude,99.00,saida
 2025-10-25,Combustível,transporte,250.00,saida
+2025-10-26,bis,lazer,5.00,saida
+2025-11-29,coca-cola 2l,lazer,25.00,saida
