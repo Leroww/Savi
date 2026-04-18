@@ -63,8 +63,13 @@ flowchart TD
 ### 1. Instalar Ollama
 
 ```bash
-# Baixar em: ollama.com
-ollama pull gpt-oss
+Rode em um powershell ou um terminal;
+irm https://ollama.com/install.ps1 | iex
+ou
+baixe o instalador no site ollama.com
+
+#baixar o modelo 
+ollama run deepseek-r1:latest
 ollama serve
 ```
 
