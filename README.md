@@ -82,7 +82,7 @@ pip install streamlit pandas requests
 ### 3. Rodar o Savi
 
 ```bash
-streamlit run src/app.py
+streamlit run src/ia.py
 ```
 
 ## 🎯 Exemplo de Uso
